@@ -36,7 +36,7 @@ handler = WebhookHandler(LINE_CHANNEL_SECRET)
 # --- Google Places API で二郎系検索（修正版） ---
 def search_jiro(area):
     # 「大阪 二郎系 ラーメン」だと弾かれることがあるので、確実にヒットしやすいワードに変更
-    query = f"{area} ラブホテル " 
+    query = f"{area} 二郎系 ラーメン" 
     url = (
         "https://maps.googleapis.com/maps/api/place/textsearch/json?"
         f"query={urllib.parse.quote(query)}&key={GOOGLE_API_KEY}"
@@ -54,15 +54,16 @@ def search_jiro(area):
     if "results" not in res or len(res["results"]) == 0:
         return f"「{area}」の周辺に次郎系ラーメンが見つかりませんでした。ニンニクが足りていません。"
 
-    shops = res["results"][:10]  # 上位3件
+    shops = res["results"][:5]  # 上位3件
 
-    reply = f"【{area}周辺のラブホテル】\n"
+    reply = f"【{area}の周辺の次郎系ラーメン】\n"
     for s in shops:
         name = s.get("name", "店名不明")
         address = s.get("formatted_address", "住所不明")
         reply += f"\n・{name}\n  {address}\n"
 
     return reply
+
 # --- Webhook のエンドポイント ---
 @app.route("/callback", methods=["POST"])
 def callback():
